@@ -1,121 +1,53 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using MyCollection;
 
 namespace Enumerable
 {
     internal class Program
     {
-        private sealed class RandomEnumerator : IEnumerator
+        public static void Main()
         {
-            private int _index;
-            private readonly int _size;
-            private static readonly int _seed;
-            private int _currentValue;
-            private Random _random;
+            _SortedList<int, int> MyList = new _SortedList<int, int>(10);
 
-            static RandomEnumerator()
+            Console.WriteLine("ADD\n________________________");
+            MyList.Add(1, 3);
+            MyList.Add(6, 35);
+            MyList.Add(3, 12);
+            MyList.Add(5, 4);
+            MyList.Add(4, 532);
+            MyList.Add(6, 63);
+            Console.WriteLine(MyList.Count);
+            Console.WriteLine("FOR\n________________________");
+            for (var i = 0; i < MyList.Count; i++)
             {
-                Random seedGenerator = new Random();
-                _seed = seedGenerator.Next();
+                Console.WriteLine(MyList.keys[i].ToString() + " " + MyList.values[i].ToString());
             }
-
-            public RandomEnumerator(int size)
+            Console.WriteLine("FOREACH\n________________________");
+            foreach (var i in MyList)
             {
-                _size = size;
-                _random = new Random(_seed);
+                Console.WriteLine(i.Key.ToString() + " " + i.Value.ToString());
             }
-
-            public bool MoveNext()
+            Console.WriteLine("COPY\n________________________");
+            KeyValuePair<int, int>[] arr = new KeyValuePair<int, int>[10];
+            MyList.CopyTo(arr, 5);
+            foreach (var i in arr)
             {
-                _currentValue = _random.Next();
-                _index++;
-
-                bool retVal = _index <= _size;
-
-                if (!retVal)
-                {
-                    Reset();
-                }
-
-                return retVal;
+                Console.WriteLine(i);
             }
-
-            public void Reset()
+            Console.WriteLine("REMOVE\n________________________");
+            MyList.Remove(4);
+            Console.WriteLine(MyList.Count);
+            foreach (var i in MyList)
             {
-                _random = new Random(_seed);
-                _index = 0;
+                Console.WriteLine(i);
             }
-
-            public object Current
-            {
-                get { return _currentValue; }
-            }
+            Console.WriteLine("CONTAINS\n________________________");
+            Console.WriteLine(MyList.Contains(3));
+            Console.ReadLine();
+            
         }
-
-        public class RandomCollection : ICollection
-        {
-            private readonly IEnumerator _random;
-
-            private readonly int _size;
-
-            public RandomCollection() : this(5)
-            {
-            }
-
-            public RandomCollection(int size)
-            {
-                _size = size;
-                _random = new RandomEnumerator(size);
-            }
-
-            public IEnumerator GetEnumerator()
-            {
-                return _random;
-            }
-
-            public void CopyTo(Array array, int index)
-            {
-                GetEnumerator().Reset();
-                while (GetEnumerator().MoveNext())
-                {
-                    array.SetValue(GetEnumerator().Current, index++);
-                }
-            }
-
-            public int Count
-            {
-                get { return _size; }
-            }
-
-            public object SyncRoot
-            {
-                get { return null; }
-            }
-
-            public bool IsSynchronized
-            {
-                get { return false; }
-            }
-        }
-
-        private static void Main()
-        {
-            RandomCollection col = new RandomCollection(7);
-
-            foreach (int item in col)
-            {
-                Console.WriteLine(item);
-            }
-
-            Console.WriteLine();
-
-            int[] copy = new int[col.Count];
-            col.CopyTo(copy, 0);
-
-            for (int x = 0; x < copy.Length; x++)
-            {
-                Console.WriteLine(copy[x]);
-            }
-        }
+        
     }
 }
