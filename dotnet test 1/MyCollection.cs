@@ -14,13 +14,9 @@ namespace MyCollection
         public int size;
         private int _capacity;
 
-        public delegate void EventHandler(object sender, String text);
-
         public event EventHandler AddElement;
         public event EventHandler RemoveElement;
         public event EventHandler ClearArray;
-
-
 
         public int Count => size;
 
@@ -121,7 +117,7 @@ namespace MyCollection
                 values[0] = value;
                 keys[0] = key;
                 _items[0] = new KeyValuePair<TKey, TValue>(key, value);
-                AddElement?.Invoke(this, "Element Added");
+                AddElement?.Invoke(this, EventArgs.Empty);
                 return;
             }
             num = Array.BinarySearch(keys, 0, size, key);
@@ -160,7 +156,7 @@ namespace MyCollection
             keys = TempKeys;
             values = TempValues;
             size++;
-            AddElement?.Invoke(this, "Element Added");
+            AddElement?.Invoke(this, EventArgs.Empty);
 
         }
 
@@ -171,7 +167,7 @@ namespace MyCollection
             keys = Array.Empty<TKey>();
             _capacity = 0;
             size = 0;
-            ClearArray?.Invoke(this, "Array Cleared");
+            ClearArray?.Invoke(this, EventArgs.Empty);
         }
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
@@ -254,6 +250,7 @@ namespace MyCollection
             keys = TempKeys;
             values = TempValues;
             size--;
+            RemoveElement?.Invoke(this, EventArgs.Empty);
             return true;
         }
         public bool Remove(TKey key)
@@ -289,7 +286,7 @@ namespace MyCollection
             keys = TempKeys;
             values = TempValues;
             size--;
-            RemoveElement?.Invoke(this, "Element Removed");
+            RemoveElement?.Invoke(this, EventArgs.Empty);
             return true;
         }
 

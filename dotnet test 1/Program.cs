@@ -11,6 +11,10 @@ namespace Enumerable
         {
             _SortedList<int, int> MyList = new _SortedList<int, int>(10);
 
+            MyList.AddElement += AddedElement;
+            MyList.RemoveElement += RemovedElement;
+            MyList.ClearArray += ClearedArray;
+
             Console.WriteLine("ADD\n________________________");
             MyList.Add(1, 3);
             MyList.Add(6, 35);
@@ -49,5 +53,17 @@ namespace Enumerable
             
         }
         
+        static void AddedElement(object sender, EventArgs e)
+        {
+            Console.WriteLine("Element Added");
+        }
+        static void RemovedElement(object sender, EventArgs e)
+        {
+            Console.WriteLine("Element Removed");
+        }
+        static void ClearedArray(object sender, EventArgs e)
+        {
+            Console.WriteLine("Array Cleared");
+        }
     }
 }
