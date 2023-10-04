@@ -260,7 +260,6 @@ namespace MyCollection
             {
                 throw new ArgumentException("Element does not exist");
             }
-            Console.WriteLine(num);
             var TempArray = new KeyValuePair<TKey, TValue>[size - 1];
             var TempKeys = new TKey[size - 1];
             var TempValues = new TValue[size - 1];

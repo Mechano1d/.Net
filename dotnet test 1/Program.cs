@@ -23,32 +23,40 @@ namespace Enumerable
             MyList.Add(4, 532);
             MyList.Add(6, 63);
             Console.WriteLine(MyList.Count);
-            Console.WriteLine("FOR\n________________________");
+
+            Console.WriteLine("\nFOR\n________________________");
             for (var i = 0; i < MyList.Count; i++)
             {
                 Console.WriteLine(MyList.keys[i].ToString() + " " + MyList.values[i].ToString());
             }
-            Console.WriteLine("FOREACH\n________________________");
+
+            Console.WriteLine("\nFOREACH\n________________________");
             foreach (var i in MyList)
             {
                 Console.WriteLine(i.Key.ToString() + " " + i.Value.ToString());
             }
-            Console.WriteLine("COPY\n________________________");
+
+            Console.WriteLine("\nCOPY\n________________________");
             KeyValuePair<int, int>[] arr = new KeyValuePair<int, int>[10];
             MyList.CopyTo(arr, 5);
             foreach (var i in arr)
             {
                 Console.WriteLine(i);
             }
-            Console.WriteLine("REMOVE\n________________________");
+            Console.WriteLine("\nREMOVE\n________________________");
             MyList.Remove(4);
             Console.WriteLine(MyList.Count);
             foreach (var i in MyList)
             {
                 Console.WriteLine(i);
             }
-            Console.WriteLine("CONTAINS\n________________________");
+
+            Console.WriteLine("\nCONTAINS\n________________________");
             Console.WriteLine(MyList.Contains(3));
+
+            Console.WriteLine("\nCLEAR\n________________________");
+            MyList.Clear();
+            Console.WriteLine(MyList.Count);
             Console.ReadLine();
             
         }
