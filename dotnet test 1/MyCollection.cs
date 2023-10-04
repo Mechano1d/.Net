@@ -22,10 +22,6 @@ namespace MyCollection
 
         public bool IsReadOnly => false;
 
-        public object SyncRoot => throw new NotImplementedException();
-
-        public bool IsSynchronized => throw new NotImplementedException();
-
         public _SortedList(int capacity)
         {
             if (capacity < 0)
@@ -66,12 +62,11 @@ namespace MyCollection
                 _items[0] = item;
                 return;
             }
-            num = Array.BinarySearch(keys, 0, size, item.Key);
-            if (num >= 0)
+            num = Search(item.Key);
+            if (num < 0)
             {
                 return;
             }
-            num = -num - 1;
             var TempArray = new KeyValuePair<TKey, TValue>[size + 1];
             var TempKeys = new TKey[size + 1];
             var TempValues = new TValue[size + 1];
@@ -120,12 +115,12 @@ namespace MyCollection
                 AddElement?.Invoke(this, EventArgs.Empty);
                 return;
             }
-            num = Array.BinarySearch(keys, 0, size, key);
-            if (num >= 0)
+            num = Search(key);
+
+            if (num < 0)
             {
                 return;
             }
-            num = -num - 1;
             var TempArray = new KeyValuePair<TKey, TValue>[size + 1];
             var TempKeys = new TKey[size + 1];
             var TempValues = new TValue[size + 1];
@@ -172,8 +167,8 @@ namespace MyCollection
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            int num = Array.BinarySearch(keys, 0, size, item.Key);
-            if (num >= 0)
+            int num = Search(item.Key);
+            if (num < 0)
             {
                 return true;
             }
@@ -181,8 +176,8 @@ namespace MyCollection
         }
         public bool Contains(TKey key)
         {
-            int num = Array.BinarySearch(keys, 0, size, key);
-            if (num >= 0)
+            int num = num = Search(key);
+            if (num < 0)
             {
                 return true;
             }
@@ -229,11 +224,12 @@ namespace MyCollection
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            int num = Array.BinarySearch(keys, 0, size, item.Key);
-            if (num < 0)
+            int num = Search(item.Key);
+            if (num > 0)
             {
-                throw new ArgumentException("Element does not exist");
+                return false;
             }
+            num = -num;
             var TempArray = new KeyValuePair<TKey, TValue>[size - 1];
             var TempKeys = new TKey[size - 1];
             var TempValues = new TValue[size - 1];
@@ -255,11 +251,12 @@ namespace MyCollection
         }
         public bool Remove(TKey key)
         {
-            int num = Array.BinarySearch(keys, 0, size, key);
-            if (num < 0)
+            int num = Search(key);
+            if (num > 0)
             {
-                throw new ArgumentException("Element does not exist");
+                return false;
             }
+            num = -num;
             var TempArray = new KeyValuePair<TKey, TValue>[size - 1];
             var TempKeys = new TKey[size - 1];
             var TempValues = new TValue[size - 1];
@@ -287,6 +284,48 @@ namespace MyCollection
             size--;
             RemoveElement?.Invoke(this, EventArgs.Empty);
             return true;
+        }
+
+        private int Search(TKey key)
+        {
+            Comparer comparer = Comparer.Default;
+            int left = 0;
+            int right = size - 1;
+            int comp;
+            TKey current;
+            while(left < right)
+            {
+                current = keys[(right + left) / 2];
+                comp = comparer.Compare(current, key);
+                if (comp == 0)
+                {
+                    if (((right + left) / 2) == 0)
+                    {
+                        return ((right + left) / 2 - 1);
+                    }
+                    else
+                    {
+                        return -((right + left) / 2);
+                    }
+                }
+                if (comp > 0)
+                {
+                    if (left == (right + left) / 2)
+                    {
+                        left = (right + left) / 2 + 1;
+                    }
+                    else left = (right + left) / 2;
+                }
+                else
+                {
+                    if (right == (right + left) / 2)
+                    {
+                        right = (right + left) / 2 - 1;
+                    }
+                    else right = (right + left) / 2;
+                }
+            }
+            return right;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

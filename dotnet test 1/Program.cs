@@ -52,7 +52,11 @@ namespace Enumerable
             }
 
             Console.WriteLine("\nCONTAINS\n________________________");
+            Console.WriteLine("3, value");
             Console.WriteLine(MyList.Contains(3));
+
+            Console.WriteLine("10, value");
+            Console.WriteLine(MyList.Contains(10));
 
             Console.WriteLine("\nCLEAR\n________________________");
             MyList.Clear();

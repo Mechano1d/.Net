@@ -5,6 +5,11 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab1", "dotnet test 1\Lab1.csproj", "{D885A946-CDAC-4709-844A-B130D06F8B44}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{543CC074-4634-43CE-8D74-8E2B2E8D23E4}"
+	ProjectSection(SolutionItems) = preProject
+		dotnet test 1\SortedListLibrary.dll = dotnet test 1\SortedListLibrary.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
