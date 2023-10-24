@@ -3,7 +3,7 @@
 namespace Lab2
 {
     [TestFixture]
-    public class EventTests
+    public class ArrayTests
     {
         private Fixture _fixture;
         private _SortedList<int, int> MySortedList;
@@ -15,23 +15,22 @@ namespace Lab2
         {
             _fixture = new Fixture();
             MySortedList = new _SortedList<int, int>(4);
-
+            TestList = _fixture.Create<SortedList<int, int>>();
+            foreach (var n in TestList)
+            {
+                MySortedList.Add(n);
+            }
         }
 
         [Test]
-        public void ElementAddedEventTest()
+        public void ArrayTest_SameSizeArray()
         {
-            bool EventTriggered = false;
-            var element = _fixture.Create<KeyValuePair<int, int>>();
+            var SameSizeArray = new int[MySortedList.size];
 
-            MySortedList.AddElement += (sender, e) => EventTriggered = true;
-            MySortedList.Add(element);
-
-            Assert.IsTrue(EventTriggered);
-
+            MySortedList.CopyTo(SameSizeArray, 0);
         }
         [Test]
-        public void ElementRemovedEventTest()
+        public void EventTest_ElementRemoved()
         {
             bool EventTriggered = false;
             var element = _fixture.Create<KeyValuePair<int, int>>();
@@ -46,14 +45,11 @@ namespace Lab2
 
         }
         [Test]
-        public void ClearArrayEventTest()
+        public void EventTest_ClearArray()
         {
             bool EventTriggered = false;
             TestList = _fixture.Create<SortedList<int, int>>();
-            foreach (var n in TestList)
-            {
-                MySortedList.Add(n.Key, n.Value);
-            }
+
 
             MySortedList.ClearArray += (sender, e) => EventTriggered = true;
             MySortedList.Clear();

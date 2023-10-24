@@ -25,7 +25,7 @@ namespace MyCollection
         {
             if (capacity == null)
             {
-                capacity = 4;
+                throw new ArgumentNullException(nameof(capacity));
             }
             if (capacity < 0)
             {
@@ -206,6 +206,25 @@ namespace MyCollection
             for (int i = 0; i < Count; i++)
             {
                 array[i + arrayIndex] = _items[i];
+            }
+        }
+        public void CopyTo(TValue[] array, int arrayIndex)
+        {
+            if (array == null)
+            {
+                throw new ArgumentNullException(nameof(array));
+            }
+            if (arrayIndex < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+            }
+            if (array.Length - arrayIndex < Count)
+            {
+                throw new ArgumentException();
+            }
+            for (int i = 0; i < Count; i++)
+            {
+                array[i + arrayIndex] = values[i];
             }
         }
 

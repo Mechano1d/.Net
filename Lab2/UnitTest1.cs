@@ -58,5 +58,25 @@ namespace Lab2
             MySortedList.Clear();
             Assert.That(MySortedList.Count, Is.EqualTo(0));
         }
+        [Test]
+        public void MyStack_Constructor_InitializationTest()
+        {
+            var TestSize = _fixture.Create<int>();
+            var MySortedList = new _SortedList<int, int>(TestSize);
+
+            Assert.That(MySortedList.values.Length, Is.EqualTo(TestSize));
+            Assert.That(MySortedList.keys.Length, Is.EqualTo(TestSize));
+        }
+
+        [Test]
+        public void Constructor_ArgumentNullTest()
+        {
+            Assert.Throws<ArgumentNullException>(() => new _SortedList<object, object>(null));
+        }
+        [Test]
+        public void Constructor_ArgumentNegativeTest()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new _SortedList<object, object>(-1));
+        }
     }
 }
