@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решен
 		dotnet test 1\SortedListLibrary.dll = dotnet test 1\SortedListLibrary.dll
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab2", "Lab2\Lab2.csproj", "{976381E1-A4EE-4E45-8E7A-EE02BF1F081B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{D885A946-CDAC-4709-844A-B130D06F8B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D885A946-CDAC-4709-844A-B130D06F8B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D885A946-CDAC-4709-844A-B130D06F8B44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{976381E1-A4EE-4E45-8E7A-EE02BF1F081B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{976381E1-A4EE-4E45-8E7A-EE02BF1F081B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{976381E1-A4EE-4E45-8E7A-EE02BF1F081B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{976381E1-A4EE-4E45-8E7A-EE02BF1F081B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,7 +7,6 @@ namespace MyCollection
 {
     public class _SortedList<TKey, TValue> : ICollection<KeyValuePair<TKey, TValue>>
     {
-        //SortedList
         public KeyValuePair<TKey, TValue>[] _items;
         public TKey[] keys;
         public TValue[] values;
@@ -22,23 +21,27 @@ namespace MyCollection
 
         public bool IsReadOnly => false;
 
-        public _SortedList(int capacity)
+        public _SortedList(int? capacity)
         {
+            if (capacity == null)
+            {
+                capacity = 4;
+            }
             if (capacity < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
             }
             size = 0;
-            _capacity = capacity;
+            _capacity = (int)capacity;
             if (capacity == 0)
             {
                 _items = Array.Empty<KeyValuePair<TKey, TValue>>();
             }
             else
             {
-                _items = new KeyValuePair<TKey, TValue>[capacity];
-                values = new TValue[capacity];
-                keys = new TKey[capacity];
+                _items = new KeyValuePair<TKey, TValue>[(int)capacity];
+                values = new TValue[(int)capacity];
+                keys = new TKey[(int)capacity];
             }
         }
 
@@ -60,6 +63,7 @@ namespace MyCollection
                 values[0] = item.Value;
                 keys[0] = item.Key;
                 _items[0] = item;
+                AddElement?.Invoke(this, EventArgs.Empty);
                 return;
             }
             num = Search(item.Key);
@@ -97,7 +101,8 @@ namespace MyCollection
             keys = TempKeys;
             values = TempValues;
             size++;
-            
+            AddElement?.Invoke(this, EventArgs.Empty);
+
         }
         public void Add(TKey key, TValue value)
         {
@@ -177,7 +182,7 @@ namespace MyCollection
         public bool Contains(TKey key)
         {
             int num = num = Search(key);
-            if (num < 0)
+            if (num <= 0)
             {
                 return true;
             }
@@ -230,16 +235,25 @@ namespace MyCollection
                 return false;
             }
             num = -num;
-            var TempArray = new KeyValuePair<TKey, TValue>[size - 1];
-            var TempKeys = new TKey[size - 1];
-            var TempValues = new TValue[size - 1];
+            var TempArray = new KeyValuePair<TKey, TValue>[_capacity - 1];
+            var TempKeys = new TKey[_capacity - 1];
+            var TempValues = new TValue[_capacity - 1];
             for (int i = 0; i < _items.Length; i++)
             {
                 if (i != num)
                 {
-                    TempArray[i] = _items[i];
-                    TempKeys[i] = _items[i].Key;
-                    TempValues[i] = _items[i].Value;
+                    if (i < num)
+                    {
+                        TempArray[i] = _items[i];
+                        TempKeys[i] = _items[i].Key;
+                        TempValues[i] = _items[i].Value;
+                    }
+                    else
+                    {
+                        TempArray[i - 1] = _items[i];
+                        TempKeys[i - 1] = _items[i].Key;
+                        TempValues[i - 1] = _items[i].Value;
+                    }
                 }
             }
             _items = TempArray;
@@ -257,9 +271,9 @@ namespace MyCollection
                 return false;
             }
             num = -num;
-            var TempArray = new KeyValuePair<TKey, TValue>[size - 1];
-            var TempKeys = new TKey[size - 1];
-            var TempValues = new TValue[size - 1];
+            var TempArray = new KeyValuePair<TKey, TValue>[_capacity - 1];
+            var TempKeys = new TKey[_capacity - 1];
+            var TempValues = new TValue[_capacity - 1];
             for (int i = 0; i < Count; i++)
             {
                 if (i != num)
@@ -292,9 +306,13 @@ namespace MyCollection
             int left = 0;
             int right = size - 1;
             int comp;
-            TKey current;
-            while(left < right)
+            TKey current = keys[(right + left) / 2]; ;
+            while(left + 1 < right)
             {
+                if (left == right)
+                {
+                    return left;
+                }
                 current = keys[(right + left) / 2];
                 comp = comparer.Compare(current, key);
                 if (comp == 0)
@@ -310,22 +328,32 @@ namespace MyCollection
                 }
                 if (comp > 0)
                 {
-                    if (left == (right + left) / 2)
-                    {
-                        left = (right + left) / 2 + 1;
-                    }
-                    else left = (right + left) / 2;
+                    left = (right + left) / 2;
                 }
                 else
                 {
-                    if (right == (right + left) / 2)
-                    {
-                        right = (right + left) / 2 - 1;
-                    }
-                    else right = (right + left) / 2;
+                    right = (right + left) / 2;
                 }
             }
-            return right;
+            comp = comparer.Compare(keys[right], key);
+            if (comp == 0)
+            {
+                return -right;
+            }
+            if (comp > 0)
+            {
+                return right + 1;
+            }
+            comp = comparer.Compare(key, keys[left]);
+            if (comp == 0)
+            {
+                return -left;
+            }
+            if (comp < 0)
+            {
+                return right;
+            }
+            return left;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

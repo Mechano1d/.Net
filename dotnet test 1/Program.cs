@@ -16,19 +16,39 @@ namespace Enumerable
             MyList.ClearArray += ClearedArray;
 
             Console.WriteLine("ADD\n________________________");
-            MyList.Add(1, 3);
-            MyList.Add(6, 35);
-            MyList.Add(3, 12);
-            MyList.Add(5, 4);
-            MyList.Add(4, 532);
-            MyList.Add(6, 63);
+            for (int i = 0; i < 50; i++)
+            {
+                Random rand = new Random(i);
+                MyList.Add(rand.Next() % 1000, rand.Next() % 1000);
+            }
             Console.WriteLine(MyList.Count);
 
             Console.WriteLine("\nFOR\n________________________");
-            for (var i = 0; i < MyList.Count; i++)
+            int j = 0;
+            while (j < MyList.Count)
             {
-                Console.WriteLine(MyList.keys[i].ToString() + " " + MyList.values[i].ToString());
+                Console.WriteLine(MyList.keys[j].ToString() + " " + MyList.values[j].ToString());
+                j++;
             }
+            int u = 0;
+            int y = 0;
+            for (j = 0; j < MyList.Count-1; j++)
+            {
+                if (MyList.keys[j] < MyList.keys[j + 1])
+                {
+                    u++;
+                }
+                if (MyList.Contains(MyList[j].Key) != true)
+                {
+                    Console.Write("Not contained: ");
+                    Console.WriteLine(MyList[j].Key);
+                    y++;
+                }
+            }
+            Console.WriteLine(u);
+            Console.WriteLine(y);
+            Console.ReadLine();
+            /*
 
             Console.WriteLine("\nFOREACH\n________________________");
             foreach (var i in MyList)
@@ -38,7 +58,7 @@ namespace Enumerable
 
             Console.WriteLine("\nCOPY\n________________________");
             KeyValuePair<int, int>[] arr = new KeyValuePair<int, int>[10];
-            MyList.CopyTo(arr, 5);
+            MyList.CopyTo(arr, 4);
             foreach (var i in arr)
             {
                 Console.WriteLine(i);
@@ -62,7 +82,7 @@ namespace Enumerable
             MyList.Clear();
             Console.WriteLine(MyList.Count);
             Console.ReadLine();
-            
+            */
         }
         
         static void AddedElement(object sender, EventArgs e)
