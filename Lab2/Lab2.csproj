@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\dotnet test 1\Lab1.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="SortedListLibrary">
       <HintPath>SortedListLibrary.dll</HintPath>
     </Reference>

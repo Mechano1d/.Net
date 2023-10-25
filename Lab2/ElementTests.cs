@@ -31,7 +31,7 @@ namespace Lab2
             }
         }
         [Test]
-        public void ElementTest_Add_Duplicate()
+        public void ElementTest_Add_Duplicate_KeyValuePair()
         {
             TestList = _fixture.Create<SortedList<int, int>>();
             foreach (var n in TestList)
@@ -39,8 +39,66 @@ namespace Lab2
                 MySortedList.Add(n.Key, n.Value);
             }
             var a = MySortedList[0];
+
+            Assert.Throws<ArgumentException>(() => MySortedList.Add(a));
+            Assert.Throws<ArgumentException>(() => TestList.Add(a.Key, a.Value));
+            for (int i = 0; i < MySortedList.Count(); i++)
+            {
+                Assert.That(MySortedList[i].Key, Is.EqualTo(TestList.Keys[MySortedList.Count() - i - 1]));
+                Assert.That(MySortedList[i].Value, Is.EqualTo(TestList.Values[MySortedList.Count() - i - 1]));
+            }
+        }
+        [Test]
+        public void ElementTest_Add_Duplicate_KeyAndValue()
+        {
+            TestList = _fixture.Create<SortedList<int, int>>();
+            foreach (var n in TestList)
+            {
+                MySortedList.Add(n.Key, n.Value);
+            }
+
+            var a = MySortedList[0];
+
             Assert.Throws<ArgumentException>(() => MySortedList.Add(a.Key, a.Value));
             Assert.Throws<ArgumentException>(() => TestList.Add(a.Key, a.Value));
+            for (int i = 0; i < MySortedList.Count(); i++)
+            {
+                Assert.That(MySortedList[i].Key, Is.EqualTo(TestList.Keys[MySortedList.Count() - i - 1]));
+                Assert.That(MySortedList[i].Value, Is.EqualTo(TestList.Values[MySortedList.Count() - i - 1]));
+            }
+        }
+        [Test]
+        public void ElementTest_Add_OverCapacity_KeyValuePair()
+        {
+            TestList = new SortedList<int, int>(4);
+            MySortedList = new _SortedList<int, int>(4);
+
+            for (int i = 0; i < 6; i++)
+            {
+                var a = _fixture.Create<KeyValuePair<int, int>>();
+                TestList.Add(a.Key, a.Value);
+                MySortedList.Add(a);
+            }
+
+            for (int i = 0; i < MySortedList.Count(); i++)
+            {
+                Assert.That(MySortedList[i].Key, Is.EqualTo(TestList.Keys[MySortedList.Count() - i - 1]));
+                Assert.That(MySortedList[i].Value, Is.EqualTo(TestList.Values[MySortedList.Count() - i - 1]));
+            }
+        }
+        [Test]
+        public void ElementTest_Add_OverCapacity_KeyAndValue()
+        {
+            TestList = new SortedList<int, int>(4);
+            MySortedList = new _SortedList<int, int>(4);
+
+            for (int i = 0; i < 6; i++)
+            {
+                var a = _fixture.Create<KeyValuePair<int, int>>();
+                TestList.Add(a.Key, a.Value);
+                MySortedList.Add(a.Key, a.Value);
+            }
+
             for (int i = 0; i < MySortedList.Count(); i++)
             {
                 Assert.That(MySortedList[i].Key, Is.EqualTo(TestList.Keys[MySortedList.Count() - i - 1]));
@@ -115,7 +173,7 @@ namespace Lab2
             Assert.That(ContainsFalse, Is.False);
         }
         [Test]
-        public void ElementTest_Remove_KeyValuePair()
+        public void ElementTest_Remove_KeyValuePair_Head()
         {
             TestList = _fixture.Create<SortedList<int, int>>();
             foreach (var n in TestList)
@@ -132,7 +190,7 @@ namespace Lab2
             Assert.That(ContainsFalse, Is.False);
         }
         [Test]
-        public void ElementTest_Remove_Key()
+        public void ElementTest_Remove_Key_Head()
         {
             TestList = _fixture.Create<SortedList<int, int>>();
             foreach (var n in TestList)
@@ -147,14 +205,31 @@ namespace Lab2
             Assert.That(ContainsFalse, Is.False);
         }
         [Test]
-        public void Test_Clear()
+        public void ElementTest_Remove_KeyValuePair_Middle()
         {
-            MySortedList = _fixture.Create<_SortedList<int, int>>();
+            TestList = _fixture.Create<SortedList<int, int>>();
+            foreach (var n in TestList)
+            {
+                MySortedList.Add(n.Key, n.Value);
+            }
+            var InvalidElement = new KeyValuePair<int, int>(-1, -1);
 
-            Assert.That(MySortedList.Count, Is.GreaterThan(0));
-            MySortedList.Clear();
-            Assert.That(MySortedList.Count, Is.EqualTo(0));
+            bool ContainsTrue = MySortedList.Remove(MySortedList[MySortedList.size / 2]);
+
+            Assert.That(ContainsTrue, Is.True);
         }
+        [Test]
+        public void ElementTest_Remove_Key_Middle()
+        {
+            TestList = _fixture.Create<SortedList<int, int>>();
+            foreach (var n in TestList)
+            {
+                MySortedList.Add(n.Key, n.Value);
+            }
 
+            bool ContainsTrue = MySortedList.Remove(MySortedList[MySortedList.size / 2].Key);
+
+            Assert.That(ContainsTrue, Is.True);
+        }
     }
 }

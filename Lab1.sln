@@ -10,7 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решен
 		dotnet test 1\SortedListLibrary.dll = dotnet test 1\SortedListLibrary.dll
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab2", "Lab2\Lab2.csproj", "{976381E1-A4EE-4E45-8E7A-EE02BF1F081B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lab2", "Lab2\Lab2.csproj", "{976381E1-A4EE-4E45-8E7A-EE02BF1F081B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D885A946-CDAC-4709-844A-B130D06F8B44} = {D885A946-CDAC-4709-844A-B130D06F8B44}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
