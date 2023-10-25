@@ -75,6 +75,7 @@ namespace Lab2
 
             Assert.Throws<ArgumentException>(() => MySortedList.CopyTo(SmallArray, 0));
         }
+        [Test]
         public void ArrayTest_InvalidIndex()
         {
             var Array = new int[MySortedList.Count];
