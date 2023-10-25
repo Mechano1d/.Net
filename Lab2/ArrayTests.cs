@@ -28,35 +28,65 @@ namespace Lab2
             var SameSizeArray = new int[MySortedList.size];
 
             MySortedList.CopyTo(SameSizeArray, 0);
+            int l = 0;
+
+            for (int i = 0; i < MySortedList.Count; i++)
+            {
+                Assert.That(MySortedList[i].Value, Is.EqualTo(SameSizeArray[l]));
+                l++;
+            }
         }
         [Test]
-        public void EventTest_ElementRemoved()
+        public void ArrayTest_DifferentSizeArray_NoOffset()
         {
-            bool EventTriggered = false;
-            var element = _fixture.Create<KeyValuePair<int, int>>();
+            var IndexOffset = _fixture.Create<int>();
+            IndexOffset %= MySortedList.Count;
+            var SameSizeArray = new int[MySortedList.Count + IndexOffset];
 
+            MySortedList.CopyTo(SameSizeArray, 0);
+            int l = 0;
 
-            MySortedList.RemoveElement += (sender, e) => EventTriggered = true;
-            MySortedList.Add(element);
-            MySortedList.Remove(element);
-
-            Assert.IsTrue(EventTriggered);
-
-
+            for (int i = 0; i < MySortedList.Count; i++)
+            {
+                Assert.That(MySortedList[i].Value, Is.EqualTo(SameSizeArray[l]));
+                l++;
+            }
         }
         [Test]
-        public void EventTest_ClearArray()
+        public void ArrayTest_DifferentSizeArray_Offset()
         {
-            bool EventTriggered = false;
-            TestList = _fixture.Create<SortedList<int, int>>();
+            var IndexOffset = _fixture.Create<int>();
+            IndexOffset %= MySortedList.Count;
+            var SameSizeArray = new int[MySortedList.Count + IndexOffset];
 
+            MySortedList.CopyTo(SameSizeArray, IndexOffset);
+            int l = IndexOffset;
 
-            MySortedList.ClearArray += (sender, e) => EventTriggered = true;
-            MySortedList.Clear();
+            for (int i = 0; i < MySortedList.Count; i++)
+            {
+                Assert.That(MySortedList[i].Value, Is.EqualTo(SameSizeArray[l]));
+                l++;
+            }
+        }
+        [Test]
+        public void ArrayTest_ArrayTooSmall()
+        {
+            var SmallArray = new int[MySortedList.Count - 1];
 
-            Assert.IsTrue(EventTriggered);
+            Assert.Throws<ArgumentException>(() => MySortedList.CopyTo(SmallArray, 0));
+        }
+        public void ArrayTest_InvalidIndex()
+        {
+            var Array = new int[MySortedList.Count];
 
+            Assert.Throws<ArgumentOutOfRangeException>(() => MySortedList.CopyTo(Array, -1));
+        }
+        [Test]
+        public void ArrayTest_NullArray()
+        {
+            int[] NullArray = null;
 
+            Assert.Throws<ArgumentNullException>(() => MySortedList.CopyTo(NullArray, 0));
         }
     }
 }

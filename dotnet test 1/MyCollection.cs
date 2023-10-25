@@ -69,7 +69,7 @@ namespace MyCollection
             num = Search(item.Key);
             if (num < 0)
             {
-                return;
+                throw new ArgumentException();
             }
             var TempArray = new KeyValuePair<TKey, TValue>[size + 1];
             var TempKeys = new TKey[size + 1];
@@ -124,7 +124,7 @@ namespace MyCollection
 
             if (num < 0)
             {
-                return;
+                throw new ArgumentException();
             }
             var TempArray = new KeyValuePair<TKey, TValue>[size + 1];
             var TempKeys = new TKey[size + 1];
@@ -181,8 +181,8 @@ namespace MyCollection
         }
         public bool Contains(TKey key)
         {
-            int num = num = Search(key);
-            if (num <= 0)
+            int num = Search(key);
+            if (num < 0)
             {
                 return true;
             }
@@ -249,11 +249,11 @@ namespace MyCollection
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             int num = Search(item.Key);
-            if (num > 0)
+            if (num >= 0)
             {
                 return false;
             }
-            num = -num;
+            num = -num + 1;
             var TempArray = new KeyValuePair<TKey, TValue>[_capacity - 1];
             var TempKeys = new TKey[_capacity - 1];
             var TempValues = new TValue[_capacity - 1];
@@ -285,11 +285,11 @@ namespace MyCollection
         public bool Remove(TKey key)
         {
             int num = Search(key);
-            if (num > 0)
+            if (num >= 0)
             {
                 return false;
             }
-            num = -num;
+            num = -num + 1;
             var TempArray = new KeyValuePair<TKey, TValue>[_capacity - 1];
             var TempKeys = new TKey[_capacity - 1];
             var TempValues = new TValue[_capacity - 1];
@@ -338,11 +338,11 @@ namespace MyCollection
                 {
                     if (((right + left) / 2) == 0)
                     {
-                        return ((right + left) / 2 - 1);
+                        return -1;
                     }
                     else
                     {
-                        return -((right + left) / 2);
+                        return -((right + left) / 2) - 1;
                     }
                 }
                 if (comp > 0)
@@ -357,7 +357,7 @@ namespace MyCollection
             comp = comparer.Compare(keys[right], key);
             if (comp == 0)
             {
-                return -right;
+                return -right - 1;
             }
             if (comp > 0)
             {
@@ -366,7 +366,7 @@ namespace MyCollection
             comp = comparer.Compare(key, keys[left]);
             if (comp == 0)
             {
-                return -left;
+                return -left - 1;
             }
             if (comp < 0)
             {
